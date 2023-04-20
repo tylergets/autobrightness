@@ -18,6 +18,7 @@ func main() {
 	// Define command-line flags
 	minBrightness := flag.Int("min", 1, "Minimum brightness value")
 	sampleRate := flag.Duration("rate", time.Second, "Sample rate")
+	exitOnChange := flag.Bool("exit-on-change", false, "Exit if brightness is changed externally")
 	flag.Parse()
 
 	log.Printf("Starting automatic backlight adjustment (minimum brightness: %d, sample rate: %s)", *minBrightness, sampleRate)
@@ -47,7 +48,7 @@ func main() {
 			continue
 		}
 
-		if lastBrightness != 0 && lastBrightness != currentBrightness {
+		if lastBrightness != 0 && lastBrightness != currentBrightness && *exitOnChange {
 			log.Println("Brightness was changed externally. Exiting.")
 			break
 		}
